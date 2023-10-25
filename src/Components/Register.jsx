@@ -1,16 +1,32 @@
 import React, { useState } from "react";
+import {createUserWithEmailAndPassword} from "firebase/auth";
+import {auth} from './firebase-config';
+import {updateProfile} from "firebase/auth";
+import {useNavigate} from 'react-router-dom'
 
 function Register() {
-
+  const nav = useNavigate();
   const [name, setName] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [registrationError, setRegistrationError] = useState(""); 
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-
+  const handleRegister = async (event) => {
+     event.preventDefault();
+     createUserWithEmailAndPassword(auth, email, password).then((userCredential) => { // Signed in
+         const user = userCredential.user;
+         setRegistrationSuccess(true);
+         alert("user registered successfully")
+         updateProfile(auth.currentUser, {
+             displayName: name
+         }).then(() => {
+         }).catch((error) => {});
+         nav("/");
+     }).catch((error) => {
+         const errorCode = error.code;
+         setRegistrationError(error.code);
+     });
   };
 
   return (
@@ -21,7 +37,7 @@ function Register() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Register your account
             </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
+            <form  className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
               <div>
                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Your name

@@ -1,14 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {signInWithEmailAndPassword} from "firebase/auth";
+import {auth} from './firebase-config';
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const navigate = useNavigate();
+  const nav = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    signInWithEmailAndPassword(auth, email, password).then((userCredential) => { // Signed in
+      const user = userCredential.user;
+      alert("user signed in successfully")
+      nav("/");
+      // ...
+  }).catch((error) => {
+      const errorCode = error.code;
+      setLoginError(errorCode);
+  });
   };
 
   return (
@@ -62,12 +72,12 @@ function Login() {
               >
                 Sign in
               </button>
-              {/* {loginError && ( // Display login error message if set
+              {loginError && ( // Display login error message if set
                 <p className="text-sm font-light text-red-500 dark:text-red-400">
                   {loginError}
                 </p>
               )}
-              {isLoggedIn && user && (
+              {/* {isLoggedIn && user && (
                 <div className="text-sm font-light text-gray-500 dark:text-gray-400">
                   <p>You are currently logged in as:</p>
                   <p>Name: {user.name}</p>
