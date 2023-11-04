@@ -8,10 +8,11 @@ import Contests from './Components/Contests';
 import Plateforms from './Components/Plateforms';
 import Login from './Components/Login';
 import Register from './Components/Register';
+import Profile from './Components/Profile';
 
 function App() {
   return (
-    <div>
+    <div className='bg-black'>
       <BrowserRouter>
       <Navbar />
       <Routes> 
@@ -20,6 +21,7 @@ function App() {
       <Route path='/plateforms' element={<Plateforms/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/register' element={<Register/>}></Route>
+      <Route path='/profile' element={<Profile/>}></Route>
       </Routes>
       <Footer/>
       </BrowserRouter>

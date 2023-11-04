@@ -65,7 +65,7 @@ setIslogegdin(true);
 
 
     return (
-        <Navbar  expand="lg" className='bg-blue-700'>
+        <Navbar  expand="lg" className='bg-gray-900'>
             <Container>
                 <Navbar.Brand href="/">
                     {/* <Image className="navimage"
@@ -104,13 +104,13 @@ setIslogegdin(true);
                         <div className=" origin-top-right absolute right-0 mt-3 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                           <div className="py-1">
                             <Nav.Link
-                              to="/profile"
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              href="/profile"
+                              className="block px-4 py-2 text-sm  text-gray-700 hover:bg-gray-100"
                               onClick={closeDropdown}
                             >
-                              View Profile
+                              Profile
                             </Nav.Link>
-                            <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <div className="block px-4 py-2 text-sm font-bold text-red-500 hover:bg-gray-100">
                             <button onClick={() => { closeDropdown(); logout(); }}>
                               Logout
                             </button>
