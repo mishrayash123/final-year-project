@@ -1,13 +1,12 @@
 import "./App.css"
-import Singin from "./components/Singin";
+// import Singin from "./components/Singin";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <div>
-      <Singin/>
-      <p className="text-black font-bold text-2xl text-center m-28">
-      {/* Helo , The Project name is Eng-Track */}
-    </p>
+ 
+      <Navbar/>
     </div>
   );
 }

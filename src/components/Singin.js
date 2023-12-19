@@ -4,14 +4,15 @@ import { useState } from 'react';
 import { Button, Grid, TextField } from "@mui/material";
 import logo from "../images/logo.png";
 import developer from "../images/developer.png";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { signInWithPopup } from "firebase/auth";
 import { auth,database,googleProvider } from "../firebase/setup";
 import { addDoc,collection } from "firebase/firestore";
 function Singin() {
     const [username,setUsername] = useState("")
 
-const addUser =async()=>{
+const addUser =async()=>
+{
     const userRef = collection (database,"Users")
     try{
         await addDoc(userRef,{username:username})
@@ -22,9 +23,10 @@ const addUser =async()=>{
 }
 const signInwithGoogle =async()=>
 {
+    !username && toast.warning("Please enter username")
     try{
         await signInWithPopup(auth, googleProvider)
-        addUser()
+         username && addUser()
     }
     catch(err)
     {
