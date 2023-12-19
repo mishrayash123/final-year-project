@@ -1,16 +1,32 @@
 import React from "react";
+import { useState } from 'react';
+
 import { Button, Grid, TextField } from "@mui/material";
 import logo from "../images/logo.png";
 import developer from "../images/developer.png";
 import { ToastContainer } from "react-toastify";
 import { signInWithPopup } from "firebase/auth";
-import { auth,googleProvider } from "../firebase/setup";
+import { auth,database,googleProvider } from "../firebase/setup";
+import { addDoc,collection } from "firebase/firestore";
 function Singin() {
+    const [username,setUsername] = useState("")
 
-const signInwithGoogle =async()=>{
+const addUser =async()=>{
+    const userRef = collection (database,"Users")
+    try{
+        await addDoc(userRef,{username:username})
+    }catch(err){
+        console.error(err)
+    }
+  
+}
+const signInwithGoogle =async()=>
+{
     try{
         await signInWithPopup(auth, googleProvider)
-    }catch(err)
+        addUser()
+    }
+    catch(err)
     {
         console.error(err)
     }
@@ -44,7 +60,7 @@ const signInwithGoogle =async()=>{
           <br/>
           <label style={{color:"grey",fontSize:"10px"}}>Designation</label>
             <br/>
-            <TextField
+            <TextField onChange={(e)=>setUsername(e.target.value)}
             size="small"
             variant="outlined"
             label="Username"
