@@ -3,7 +3,22 @@ import { Button, Grid, TextField } from "@mui/material";
 import logo from "../images/logo.png";
 import developer from "../images/developer.png";
 import { ToastContainer } from "react-toastify";
+import { signInWithPopup } from "firebase/auth";
+import { auth,googleProvider } from "../firebase/setup";
 function Singin() {
+
+const signInwithGoogle =async()=>{
+    try{
+        await signInWithPopup(auth, googleProvider)
+    }catch(err)
+    {
+        console.error(err)
+    }
+ 
+}
+
+
+
   return (
     <div>
       <Grid container>
@@ -36,7 +51,7 @@ function Singin() {
             xs={{ width: "400px", mt: "5px" }}
           />
           <br></br>
-          <Button onClick="Google" size='large' variant='contained' sx={{width:"250px",borderRadius:"50px",mt:"25px",height:"50px"}}>Signin</Button>
+          <Button onClick={signInwithGoogle} size='large' variant='contained' sx={{width:"250px",borderRadius:"50px",mt:"25px",height:"50px"}}>Signin</Button>
           
         </Grid>
         <Grid item xs={6}>
