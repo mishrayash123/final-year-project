@@ -3,12 +3,12 @@ import Sidebar from './Sidebar'
 import Middle from './Middle'
 import RightBar from './RightBar'
 import { Grid } from '@mui/material'
-function Home() {
+function Home({userData}) {
     return (
         <div style={{backgroundColor:"#F6F7F3",height:"100%",padding:"20px"}}>
             <Grid container spacing={4}>
                 <Grid item xs={3}>
-                    <Sidebar/>
+                    <Sidebar userData={userData}/>
                 </Grid>
                 <Grid item xs={6}>
                     <Middle/>
