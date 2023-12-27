@@ -19,7 +19,7 @@ function Sidebar({userData}) {
         </div>
         <h4 style={{color:"#6F6F6F",textAlign:"center", position:"relative"}}>Designation</h4>
            <Link to="/connect"> <h5 style={{ fontweight:"100", color:"#6F6F6F",textAlign:"center"}}>Connections</h5></Link>
-            <h5 style={{fontweight:"100", color:"#6F6F6F",textAlign:"center"}}>Invitation</h5>
+         <Link to="/invite">  <h5 style={{fontweight:"100", color:"#6F6F6F",textAlign:"center"}}>Invitation</h5></Link> 
         </div>
     
     </div>
