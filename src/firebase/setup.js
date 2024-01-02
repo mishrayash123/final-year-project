@@ -1,18 +1,28 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import{getAuth, GoogleAuthProvider} from "firebase/auth"
-import{getFirestore} from "firebase/firestore"
+import {initializeApp} from "firebase/app";
+import {getAnalytics} from "firebase/analytics";
+import {getAuth} from "firebase/auth";
+import {getFirestore} from "firebase/firestore";
+import {getStorage} from "firebase/storage";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDLrDTgQ-YxBGZUIDrCwGYFayhkEhcjHYI",
-  authDomain: "final-year-project-f184b.firebaseapp.com",
-  projectId: "final-year-project-f184b",
-  storageBucket: "final-year-project-f184b.appspot.com",
-  messagingSenderId: "799098951870",
-  appId: "1:799098951870:web:69b602d4cbca02470ea6ef"
+  apiKey: "AIzaSyC3XcuQcKY1uFwqPxYsr7Fl1kJrBFVI2Vo",
+  authDomain: "profile-c2f87.firebaseapp.com",
+  projectId: "profile-c2f87",
+  storageBucket: "profile-c2f87.appspot.com",
+  messagingSenderId: "1029209016746",
+  appId: "1:1029209016746:web:b7e093c25e4b8f488203d3",
+  measurementId: "G-NNYJ72DDLJ"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth =getAuth(app)
-export  const googleProvider=new GoogleAuthProvider(app)
- export const database =getFirestore(app)
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+export {
+    auth,
+    storage,
+    db
+};
