@@ -9,6 +9,9 @@ import Notlogin from './components/Pages/Notlogin'
 import Notfound from './components/Pages/Notfound'
 import { onAuthStateChanged } from "firebase/auth";
 import { auth} from "./firebase/setup";
+import Profiles from './components/Subpages/Profiles'
+import Profile from "./components/Subpages/Profile";
+import Footer from "./components/Pages/Footer";
 
 
 
@@ -36,16 +39,21 @@ function App() {
        {isLoggedIn ? (
              <>
     <Route path='/' element={<Home />}></Route>
+    <Route path='/users' element={<Profiles />}></Route>
+    <Route path='/Gotoprofile' element={<Profile />}></Route>
     </>
     ) : ( 
             <>
     <Route path='/' element={<Notlogin />}></Route>
+    <Route path='/Gotoprofile' element={<Notlogin />}></Route>
+    <Route path='/users' element={<Notlogin />}></Route>
     <Route path='/login' element={<Signin />}></Route>
     <Route path='/register' element={<Register />}></Route>
             </>
              )}
              <Route path="*" element={<Notfound />} />
        </Routes>
+       <Footer />
     </div>
 
   );
