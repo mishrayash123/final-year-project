@@ -12,6 +12,8 @@ import { auth} from "./firebase/setup";
 import Profiles from './components/Subpages/Profiles'
 import Profile from "./components/Subpages/Profile";
 import Footer from "./components/Pages/Footer";
+import Profile1 from './components/Services/Profile'
+import Edit from "./components/Services/Edit";
 
 
 
@@ -41,11 +43,15 @@ function App() {
     <Route path='/' element={<Home />}></Route>
     <Route path='/users' element={<Profiles />}></Route>
     <Route path='/Gotoprofile' element={<Profile />}></Route>
+    <Route path='/profile' element={<Profile1 />}></Route>
+    <Route path='/edit' element={<Edit />}></Route>
     </>
     ) : ( 
             <>
     <Route path='/' element={<Notlogin />}></Route>
     <Route path='/Gotoprofile' element={<Notlogin />}></Route>
+    <Route path='/profile' element={<Notlogin />}></Route>
+    <Route path='/edit' element={<Notlogin />}></Route>
     <Route path='/users' element={<Notlogin />}></Route>
     <Route path='/login' element={<Signin />}></Route>
     <Route path='/register' element={<Register />}></Route>
