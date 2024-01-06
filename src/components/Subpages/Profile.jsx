@@ -1,96 +1,80 @@
 import React, { useEffect, useState } from "react";
 import pic from "../Images/profile.jpg";
-
+import {Link} from "react-router-dom"
+import { db } from "../../firebase/setup"; 
+import { collection } from "firebase/firestore";
+import {getDocs, } from "firebase/firestore";
 import '../Css/All.css'
 import {useNavigate} from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 
 function Profile() {
-  const [profiledata,setprofiledata] = useState(['1']);
+  const [profiledata,setprofiledata] = useState([]);
   const nav = useNavigate();
-
-
+  const location = useLocation();
 
   const fetchData = async () => {
-   
+    const colRef = collection(db,"Profiles");
+    const snapshots = await getDocs(colRef);
+    const docs = snapshots.docs.map(doc => doc.data());
+    setprofiledata(docs);
   }
 
-
   useEffect(() => {
+    
     fetchData();
   }, []);
 
+
   return (
-    <div className="p-8  ">
-        <div className="flex items-center justify-center m-6 ">
-        {
-          profiledata.map(profiledata =>(
-          <div className="max-w-md xl:max-w-2xl bg-white ">
-            <div className="shadow-xl   p-6 md:p-8 lg:p-10 xl:p-12">
-              <div className="photo-wrapper mx-auto mb-6 ">
-                <img
-                  className="w-40 h-40 object-cover rounded-full mx-auto border-solid border-2 border-black"
-                  src={ pic}
-                  alt="Profile"
-                />
-              </div>
-                <div className="text-center">
-                  <h3 className="text-base lg:text-2xl font-bold leading-8">
-                    Yash Kumar Mishra
-                  </h3>
-                </div>
-              <table className="text-lg lg:text-base my-6">
-                <tbody>
-                    <tr>
-                      <td className="px-2 py-2 text-gray-500 font-semibold">
-                        Email
-                      </td>
-                      <td className="px-2 py-2">mishrayash3778@gmail.com</td>
-                    </tr>
-                  <tr>
-                      <td className="px-2 py-2 text-gray-500 font-semibold">
-                        Phone
-                      </td>
-                      <td className="px-2 py-2">+91-6397124401</td>
-                    </tr>
-                    <tr>
-                      <td className="px-2 py-2 text-gray-500 font-semibold">
-                        Year
-                      </td>
-                      <td className="px-2 py-2">
-                        Final Year
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-2 py-2 text-gray-500 font-semibold">
-                        Course
-                      </td>
-                      <td className="px-2 py-2">B-Tech</td>
-                    </tr>
-                  <tr>
-                      <td className="px-2 py-2 text-gray-500 font-semibold">
-                        City
-                      </td>
-                      <td className="px-2 py-2">Bareilly</td>
-                    </tr>
-                    <tr>
-                      <td className="px-2 py-2 text-gray-500 font-semibold">
-                        State
-                      </td>
-                      <td className="px-2 py-2">Uttar Pradesh</td>
-                    </tr>
-                    <tr>
-                      <td className="px-2 py-2 text-gray-500 font-semibold">
-                        Pincode
-                      </td>
-                      <td className="px-2 py-2">243302</td>
-                    </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          ))}
-        </div>
-    </div>
+    <div class="p-5">
+      {
+        profiledata.filter((e)=>(e.linkedin===location.state.id)).map(profiledata =>(
+      <div class="p-8 bg-white shadow mt-24">  
+      <div class="grid grid-cols-1 md:grid-cols-3">   
+       <div class="grid grid-cols-3 text-center order-last md:order-first mt-20 md:mt-0">     
+        <div>     
+           <p class="font-bold text-gray-700 text-xl">22</p>     
+              <p class="text-gray-400">Total Post</p>    
+                </div>    
+                  {/* <div>     
+                          <p class="font-bold text-gray-700 text-xl">10</p>    
+                              <p class="text-gray-400">Photos</p>   
+                                 </div>      
+                                  <div>      
+                                     <p class="font-bold text-gray-700 text-xl">89</p>     
+                                 <p class="text-gray-400">Comments</p>  
+                                  </div>     */}
+                              </div>  
+                                <div class="relative">   
+                                 <div class="w-48 h-48 bg-indigo-100 mx-auto rounded-full shadow-2xl absolute inset-x-0 top-0 -mt-24 flex items-center justify-center text-indigo-500">
+                                 <img className="border-2 rounded-full w-48 h-48" src={profiledata.image}   />
+                                 </div>  
+                                </div>   
+                               <div class="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
+                                {/* <button  class="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5" onClick={()=>{
+                                  nav('/edit')
+                                }}>Edit</button>    */}
+                                </div> 
+                                </div> 
+                                <div class="mt-20 text-center border-b pb-12">  
+                                 <h1 class="text-4xl font-medium text-gray-700">{profiledata.name} <span class="font-light text-gray-500"></span></h1>  
+                                 <p class="font-light text-gray-600 mt-3">CS & IT {profiledata.category}</p>  
+                                 <p class="mt-8 text-gray-500">{profiledata.subtitle}</p> 
+                                 <p class="mt-2 text-gray-500">Phone No : {profiledata.phone}</p>
+                                  <p class="mt-2 text-gray-500">Current Address : {profiledata.caddress}</p> 
+                                  <p class="mt-2 text-gray-500">Parmanent Address : {profiledata.paddress}</p>
+                                  <p class="mt-2 text-gray-500">Whatsapp No : {profiledata.whatsapp}</p>
+                                  <p class="mt-2 text-gray-500">Linkedin Url : {profiledata.linkedin}</p>
+                                  <p class="mt-2 text-gray-500">Email : {profiledata.email}</p>
+                                </div>  
+                               <div class="mt-12 flex flex-col justify-center">    
+                               <p class="text-gray-600 text-center font-light lg:px-16">{profiledata.about}</p>  
+                                </div>
+                               </div>
+                                ))
+                              }
+                               </div>
   );
 }
 

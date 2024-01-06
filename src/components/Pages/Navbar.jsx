@@ -1,12 +1,12 @@
 import { Transition } from "@headlessui/react";
 import React, { useState, useRef, useEffect } from "react";
 import pic from "../Images/profile.jpg";
-import {signOut, onAuthStateChanged} from "firebase/auth";
-import { auth } from "../../firebase/setup";
+import {useAuth} from "../../AuthContext"
+
 
 const Navbar = () => {
+  const { isLoggedIn,logout} = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isLoggedIn,setisLoggedIn]=useState(true)
   const dropdownRef = useRef(null);
   const closeDropdown = () => {
     setIsDropdownOpen(false);
@@ -42,24 +42,6 @@ const Navbar = () => {
   const divRef = useRef();
 
 
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-        setisLoggedIn(true)
-            
-        } else {
-          setisLoggedIn(false)
-        }
-    });
-}, [auth.currentUser]);
-
-
-const logout = async () => {
-    signOut(auth).then(() => {
-        alert("Successfully logout");
-    }).catch((error) => {});
-};
 
 
   return (
@@ -109,7 +91,7 @@ const logout = async () => {
                         />
                       </button>
                       {isDropdownOpen && (
-                        <div className=" origin-top-right absolute right-0 mt-3 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <div className=" origin-top-right absolute right-0 mt-3 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                           <div className="py-1">
                             <a
                               href="/profile"

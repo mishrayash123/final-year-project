@@ -1,4 +1,4 @@
-import Posts from "../Services/Posts";
+import Posts from "../Subpages/Posts";
 import pic from "../Images/profile.jpg"
 
 

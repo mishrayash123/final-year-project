@@ -7,31 +7,19 @@ import Navbar from "./components/Pages/Navbar";
 import Home  from "./components/Pages/Home";
 import Notlogin from './components/Pages/Notlogin'
 import Notfound from './components/Pages/Notfound'
-import { onAuthStateChanged } from "firebase/auth";
-import { auth} from "./firebase/setup";
 import Profiles from './components/Subpages/Profiles'
 import Profile from "./components/Subpages/Profile";
 import Footer from "./components/Pages/Footer";
 import Profile1 from './components/Services/Profile'
 import Edit from "./components/Services/Edit";
+import {useAuth} from './AuthContext'
 
 
 
 function App() {
-  const [isLoggedIn,setisLoggedIn]=useState(true)
+  const { isLoggedIn } = useAuth();
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-       setisLoggedIn(true)
-        
-      } else {
-        
-        setisLoggedIn(false)
-      }
-    });
-  }, [auth.currentUser]);
-
+  
 
 
   return (
