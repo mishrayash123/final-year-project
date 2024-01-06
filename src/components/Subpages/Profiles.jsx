@@ -21,7 +21,8 @@ import {getDocs, } from "firebase/firestore";
 
 function Profiles() {
   const [profiles, setprofiles] = useState([]);
-  const [Search,setSearch] = useState(" ")
+  const [cat,setcat] = useState("")
+  const [Search,setSearch] = useState("")
   const nav = useNavigate();
 
 
@@ -32,7 +33,6 @@ function Profiles() {
     const snapshots = await getDocs(colRef);
     const docs = snapshots.docs.map(doc => doc.data());
     setprofiles(docs);
-    console.log(docs)
   }
 
   useEffect(() => {
@@ -52,13 +52,18 @@ function Profiles() {
             setSearch(e.target.value)
           }}/>
 					<div className="ms:flex items-center px-2 rounded-lg space-x-4 mx-auto my-2">
-						<select id="Com" className="text-base text-gray-800 outline-none border-2 px-4 py-2 rounded-lg">
-            <option value="com" selected>Teacher</option>
-            <option value="net">1st Year</option>
-            <option value="org">2nd Year</option>
-            <option value="io">3rd Year</option>
-            <option value="io">Final Year</option>
-            <option value="io">Pass Out</option>
+						<select id="Com" className="text-base text-gray-800 outline-none border-2 px-4 py-2 rounded-lg" onChange={(e)=>{
+              setcat(e.target.value)
+              console.log(e.target.value)
+            }}>
+            <option value="" >Category</option>
+            <option value="" >All</option>
+            <option value="1st year">1st year</option>
+              <option value="2nd year">2nd year</option>
+              <option value="3rd year">3rd year</option>
+              <option value="4th year">4th year</option>
+              <option value="Teacher">Teacher</option>
+              <option value="Pass out">Pass out</option>
           </select>
 						<button className="bg-indigo-500 text-white text-base rounded-lg px-4 py-2 font-thin my-2">Search</button>
 					</div>
@@ -69,11 +74,11 @@ function Profiles() {
       <div className='my-3'>
        <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 pt-3 gap-8 w-[90%]" role="group">
          {
-          profiles.map(profiles =>(
+          profiles.filter((e)=>(e.category.toLowerCase().includes(cat.toLowerCase()))).filter((e)=>(e.name.toLowerCase().includes(Search.toLowerCase()))).map(profiles =>(
             <a href=''
              onClick={
               (e) => {
-                nav('/Gotoprofile', { state: { id:profiles.linkedin} });
+                nav('/Gotoprofile', { state: { id:profiles.userid} });
               }
           }
           >
@@ -82,7 +87,7 @@ function Profiles() {
         <img
           src={profiles.image}
           alt="ui/ux review check"
-          className='rounded-lg wid'
+          className='rounded-full wid mx-auto'
         />
       </CardHeader>
       <CardBody placeholder="k">

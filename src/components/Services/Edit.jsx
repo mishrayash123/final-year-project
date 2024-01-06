@@ -35,7 +35,8 @@ function Edit() {
       subtitle:subtitle,
       email: email,
       whatsapp :whatsapp,
-      linkedin:Linkedinid
+      linkedin:Linkedinid,
+      userid:userid
     }
     );
     alert("Profile Updated Succesfully");
