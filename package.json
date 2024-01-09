@@ -39,6 +39,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy":"https://contestsapi.onrender.com/cached/2",
   "eslintConfig": {
     "extends": [
       "react-app",
