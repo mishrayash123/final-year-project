@@ -13,6 +13,8 @@ import Footer from "./components/Pages/Footer";
 import Profile1 from './components/Services/Profile'
 import Edit from "./components/Services/Edit";
 import {useAuth} from './AuthContext'
+import Plateform from './components/Contests/Plateforms'
+import Contests from './components/Contests/Contests'
 
 
 
@@ -29,14 +31,18 @@ function App() {
        {isLoggedIn ? (
              <>
     <Route path='/' element={<Home />}></Route>
+    <Route path='/contests' element={<Contests />}></Route>
     <Route path='/users' element={<Profiles />}></Route>
     <Route path='/Gotoprofile' element={<Profile />}></Route>
     <Route path='/profile' element={<Profile1 />}></Route>
     <Route path='/edit' element={<Edit />}></Route>
+    <Route path='/plateforms' element={<Plateform />}></Route>
     </>
     ) : ( 
             <>
     <Route path='/' element={<Notlogin />}></Route>
+    <Route path='/contests' element={<Notlogin />}></Route>
+    <Route path='/plateforms' element={<Notlogin />}></Route>
     <Route path='/Gotoprofile' element={<Notlogin />}></Route>
     <Route path='/profile' element={<Notlogin />}></Route>
     <Route path='/edit' element={<Notlogin />}></Route>

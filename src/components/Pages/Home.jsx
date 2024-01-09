@@ -104,22 +104,6 @@ const Home = () => {
   useEffect(() => {
     fetchData();
     fetchData1()
-    
-    fetch('https://contestsapi.onrender.com/cached/2')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return response.json();
-  })
-  .then(data => {
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Fetch error:', error);
-  });
-
   }, []);
 
     return(
