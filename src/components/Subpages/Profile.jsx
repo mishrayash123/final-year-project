@@ -121,27 +121,26 @@ function Profile() {
                   <Typography variant="h5" color="blue-gray">
                     {posts.name}
                   </Typography>
-                  {/* <div className="5 flex items-center gap-0">
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                  </div> */}
                 </div>
                 <Typography color="blue-gray">{posts.sub.slice(0,40)}</Typography>
+                <div className='flex justify-start '>
+        <p className=' text-gray-600 font-bold text-sm' placeholder="k">
+          {posts.date}
+        </p>
+        </div>
               </div>
             </CardHeader>
             <CardBody className="mb-6 p-3 ">
               <Typography>
                {posts.content}
               </Typography>
+              <Typography className='text-blue-600 font-bold mt-10'>
+               <a href={posts.link} target='_blank'>{posts.link}</a>
+              </Typography>
+              {posts.image && (
+                <img src={posts.image}  className='mt-3 w-[400px] h-[350px]'/>
+              )}
             </CardBody>
-            <div className='flex items-center justify-end m-3'>
-        <p className=' text-gray-600 font-bold text-sm' placeholder="k">
-          {posts.date}
-        </p>
-        </div>
           </Card>
           ))
          }

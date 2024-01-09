@@ -7,6 +7,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import {setDoc} from "firebase/firestore";
 import { collection } from "firebase/firestore";
 import {getDocs, } from "firebase/firestore";
+import {storage} from "../../firebase/setup"
+import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 import {
   Card,
   CardHeader,
@@ -23,8 +25,11 @@ const Home = () => {
   const nav = useNavigate();
   const userid = localStorage.getItem("useridengtrack");
   const [open, setOpen] = useState(false)
-  const [id,setid]=useState(parseInt(Math.random()*1000).toString())
   const [search,setsearch] = useState("")
+  const [image,setimage] = useState("")
+  const [link,setlink] = useState("")
+  const [image1,setimage1]=useState(null)
+  const [textoimage, settextoimage] = useState("");
 
   const cancelButtonRef = useRef(null)
 
@@ -33,6 +38,7 @@ const Home = () => {
     const snapshots = await getDocs(colRef);
     const docs = snapshots.docs.map(doc => doc.data());
     setposts(docs);
+    console.log(docs)
   }
 
 
@@ -46,12 +52,41 @@ const Home = () => {
       
     } else {
       alert("you have not completed your profile yet ....")
+      nav('/edit')
     }
   }
 
+  const handleuploadimage = async() =>{
+    const imageRef = ref(storage,content);
+    if (image1) {
+        uploadBytes(imageRef, image1).then(() => {
+            getDownloadURL(imageRef).then((url) => {
+                setimage(url);
+                alert("Image Uploaded")
+                settextoimage(" ")
+            }).catch((error) => {
+                console.log(error.message, "error geting the image url");
+            })
+            setimage(null);
+            settextoimage(" ")
+        }).catch((error) => {
+            console.log(error.message);
+        })
+    }
+  }
+  
+  function handleChange(event) {
+      setimage1(event.target.files[0]);
+  settextoimage("Image selected");
+  handleuploadimage();
+  }
+
   const post = ()=>{
+    const id = parseInt(Math.random()*1000).toString();
     setDoc(doc(db,"Posts",id), {
       content:content,
+      image:image,
+      link:link,
       date: date,
       pic:profiledata.image,
       userid:userid,
@@ -62,6 +97,8 @@ const Home = () => {
     }
     );
     alert("Post Uploaded Succesfully");
+    setcontent("")
+    setlink("")
     fetchData1()
   }
 
@@ -112,6 +149,34 @@ const Home = () => {
                     setcontent(e.target.value)
                    }}
                    ></textarea>
+                   <div className="relative z-0 w-full my-3  group">
+          <input
+            type="text"
+            id="Link"
+            name="Link"
+            value={link}
+            onChange={(e) => setlink(e.target.value)}
+            required // Mark the field as required
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" "
+          />
+          <label
+            for="Linkedinid"
+            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          >
+             url
+          </label>
+        </div>
+        <div className="relative z-0 w-full mb-3 group">
+          <label
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            for="image"
+          >
+          Image
+          </label>
+          <input type="file" onChange={handleChange}/>
+        </div>
+        <p className="text-base text-red-600">{textoimage}</p> 
                       </div>
                     </div>
                   </div>
@@ -206,27 +271,26 @@ const Home = () => {
               }>
                     {posts.name}
                   </Typography>
-                  {/* <div className="5 flex items-center gap-0">
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                  </div> */}
                 </div>
                 <Typography color="blue-gray">{posts.sub.slice(0,40)}</Typography>
-              </div>
-            </CardHeader>
-            <CardBody className="mb-6 p-3 ">
-              <Typography>
-               {posts.content}
-              </Typography>
-            </CardBody>
-            <div className='flex items-center justify-end m-3'>
+                <div className='flex justify-start '>
         <p className=' text-gray-600 font-bold text-sm' placeholder="k">
           {posts.date}
         </p>
         </div>
+              </div>
+            </CardHeader>
+            <CardBody className="mb-1 p-2 ">
+              <Typography>
+               {posts.content}
+              </Typography>
+              <Typography className='text-blue-600 font-bold mt-10'>
+               <a href={posts.link} target='_blank'>{posts.link}</a>
+              </Typography>
+              {posts.image && (
+                <img src={posts.image}  className='mt-3 w-[400px] h-[350px]'/>
+              )}
+            </CardBody>
           </Card>
           ))
          }
