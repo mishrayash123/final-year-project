@@ -57,7 +57,8 @@ const Home = () => {
       userid:userid,
       id:id,
       name:profiledata.name,
-      sub:profiledata.subtitle
+      sub:profiledata.subtitle,
+      timestamp:Date.now()
     }
     );
     alert("Post Uploaded Succesfully");
@@ -174,7 +175,9 @@ const Home = () => {
 <div className='my-3'>
        <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 pt-3 gap-8 w-[90%] max-[640px]:w-[90%] " role="group">
          {
-          posts.filter((e)=>(e.content.toLowerCase().includes(search.toLowerCase()))).map(posts =>(
+          posts.sort(function(x, y){
+            return y.timestamp - x.timestamp;
+        }).filter((e)=>(e.content.toLowerCase().includes(search.toLowerCase()))).map(posts =>(
             <Card color="transparent"  className="w-full max-w-[26rem] shadow-2xl rounded-lg">
             <CardHeader
               color="transparent"

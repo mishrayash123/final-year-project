@@ -96,7 +96,9 @@ function Profile() {
                                <div className='my-3'>
        <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 pt-3 gap-8 w-[90%] max-[640px]:w-[90%] " role="group">
          {
-          posts.map(posts =>(
+          posts.sort(function(x, y){
+            return y.timestamp - x.timestamp;
+        }).map(posts =>(
             <Card color="transparent"  className="w-full max-w-[26rem] shadow-2xl rounded-lg">
             <CardHeader
               color="transparent"
@@ -137,7 +139,7 @@ function Profile() {
                                             async (e) => {
                                                 deleteDoc(doc(db,"Posts",posts.id));
                                                 fetchData1();
-                                                alert("Deleted from favourites");
+                                                alert("Deleted");
                                             }
                                     }>
           Delete

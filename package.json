@@ -39,7 +39,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://contestsapi.onrender.com/",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -60,6 +59,7 @@
   },
   "devDependencies": {
     "fbjs": "^3.0.5",
+    "http-proxy-middleware": "^2.0.6",
     "tailwindcss": "^3.4.0"
   }
 }
