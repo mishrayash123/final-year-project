@@ -48,9 +48,9 @@ const Contests =()=>{
             <Card color="transparent"  className="w-full max-w-[26rem] shadow-2xl rounded-lg">
             <CardBody className="mb-1 flex flex-col text-center">
             <Typography color="blue-gray" className="text-black font-bold">{contest.title}</Typography>
-            <Typography color="blue-gray">Start Time : {contest.startTime}</Typography>
-              <Typography> End Time : {contest.endTime}</Typography>
-              <Typography> Duration : {contest.duration}</Typography>
+            <Typography color="blue-gray">Start Date : {new Date(contest.startTime).toDateString()} {new Date(contest.startTime).toTimeString()}</Typography>
+              <Typography> End Time : {new Date(contest.endTime).toDateString()} {new Date(contest.endTime).toTimeString()}</Typography>
+              <Typography> Duration : {parseInt(contest.duration)/(60 * 60)} hr</Typography>
               <Typography className='text-blue-800 font-bold'>
                <a href={contest.url} target='_blank'>Url</a>
               </Typography>
