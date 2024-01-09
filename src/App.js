@@ -12,6 +12,7 @@ import Profile from "./components/Subpages/Profile";
 import Footer from "./components/Pages/Footer";
 import Profile1 from './components/Services/Profile'
 import Edit from "./components/Services/Edit";
+import Platforms from "./components/Contests/Platforms";
 import {useAuth} from './AuthContext'
 
 
@@ -33,10 +34,12 @@ function App() {
     <Route path='/Gotoprofile' element={<Profile />}></Route>
     <Route path='/profile' element={<Profile1 />}></Route>
     <Route path='/edit' element={<Edit />}></Route>
+    <Route path='/platforms' element={<Platforms />}></Route>
     </>
     ) : ( 
             <>
     <Route path='/' element={<Notlogin />}></Route>
+    <Route path='/platforms' element={<Notlogin />}></Route>
     <Route path='/Gotoprofile' element={<Notlogin />}></Route>
     <Route path='/profile' element={<Notlogin />}></Route>
     <Route path='/edit' element={<Notlogin />}></Route>
