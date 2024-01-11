@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import pic from "../Images/profile.jpg";
-import {Link} from "react-router-dom"
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/setup"; 
 import { collection } from "firebase/firestore";
@@ -32,13 +30,27 @@ function Profile() {
 
 
   const fetchData = async () => {
-    const docRef = doc(db, "Profiles",userid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      setprofiledata(docSnap.data())
-    } else {
-      alert("you have not completed your profile yet ....")
+    try {
+      const sessionToken=localStorage.getItem("engtracktoken");
+  const response = await fetch(
+    "https://eng-backend.onrender.com/users",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({sessionToken}),
     }
+  );
+  if (response.ok) {
+    const data = await response.json();
+    setprofiledata(data)
+  } else {
+    alert("Something went wrong");
+  }
+} catch (error) {
+  console.error("Error during login:", error);
+}
   }
 
 
@@ -50,6 +62,8 @@ function Profile() {
   return (
     <div>
     <div class="p-5">
+    {
+          profiledata.filter((e)=>(e._id===userid)).map(profiledata =>(
       <div class="p-8 bg-white shadow mt-24">  
       <div class="grid grid-cols-1 md:grid-cols-3">   
        <div class="grid grid-cols-3 text-center order-last md:order-first mt-20 md:mt-0">     
@@ -94,6 +108,7 @@ function Profile() {
                                <p class="text-gray-600 text-center font-light lg:px-16">{profiledata.about}</p>  
                                 </div>
                                </div>
+                               ))}
                                </div>
                                <div className='my-3'>
        <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 pt-3 gap-8 w-[90%] max-[640px]:w-[90%] " role="group">
