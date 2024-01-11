@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import {signInWithEmailAndPassword} from "firebase/auth";
-import {auth} from '../../firebase/setup';
+import { useAuth } from "../../AuthContext";
 
 
 const Signin = () => {
+  const {login, setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,14 +12,33 @@ const Signin = () => {
 
   const handleLogin = async(e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password).then((userCredential) => { // Signed in
-        const user = userCredential.user;
-        alert("user signed in successfully")
-        navigate('/')
-    }).catch((error) => {
-        const errorCode = error.code;
-        alert(errorCode);
-    });
+    try {
+      const response = await fetch(
+        "https://eng-backend.onrender.com/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const { username, email } = data;
+        setUser({ username, email });
+        login();
+        localStorage.setItem("engtracktoken", data.sessionToken);
+        localStorage.setItem("useridengtrack", data._id);
+        alert("Logged in successfully");
+        navigate("/");
+      } else {
+        alert("something went wrong...please check credential");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
   };
 
   return (
@@ -54,9 +73,9 @@ const Signin = () => {
                         <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required value={password}
                   onChange={(e) => setPassword(e.target.value)}/>
                     </div>
-                    <div className="flex items-center justify-between">
+                    {/* <div className="flex items-center justify-between">
                         <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
-                    </div>
+                    </div> */}
                     <button type="submit" className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-blue-700 dark:focus:ring-primary-800" onClick={handleLogin}>Sign in</button>
                     <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                         Don’t have an account yet? <a href="/register" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>

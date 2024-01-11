@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import {createUserWithEmailAndPassword} from "firebase/auth";
-import {auth} from '../../firebase/setup';
 
 
 
 const Register = () => { 
+  const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,14 +12,25 @@ const Register = () => {
 
   const handleRegister = async(e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password).then((userCredential) => { // Signed in
-        const user = userCredential.user;
-        alert("user signed up successfully")
-        navigate('/');
-    }).catch((error) => {
-        const errorCode = error.code;
-        alert(errorCode);
-    });
+
+    try {
+      const response = await fetch("https://eng-backend.onrender.com/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      if (response.ok) {
+        alert("Registered successfully and now you can login your id");
+        navigate("/login");
+      }else {
+        alert("something went wrong...please check credential");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
   };
 
   return (
@@ -45,6 +55,11 @@ const Register = () => {
                     Sign up to your account
                 </h1>
                 <form className="space-y-4 md:space-y-6" action="#" onSubmit={handleRegister}>
+                <div>
+                        <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                        <input type="username" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required  value={username}
+                  onChange={(e) => setusername(e.target.value)}/>
+                    </div>
                     <div>
                         <label  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                         <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required  value={email}

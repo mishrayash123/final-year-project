@@ -1,7 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth} from "./firebase/setup";
-import {signOut} from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -12,20 +9,19 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  
+  const authToken = localStorage.getItem("engtracktoken");
+    const id = localStorage.getItem("useridengtrack");
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-       setIsLoggedIn(true)
-        localStorage.setItem("useridengtrack",user.uid);
-      } else {
-        
-        setIsLoggedIn(false)
+    
+    if (authToken) {
+      if (authToken) {
+        setIsLoggedIn(true);
       }
-    });
-  }, [auth.currentUser]);
-
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [authToken]);
   
   const login = () => {
     setIsLoggedIn(true);
@@ -33,9 +29,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setIsLoggedIn(false);
-    signOut(auth).then(() => {
-        alert("Successfully logout");
-    }).catch((error) => {});
+    localStorage.removeItem("engtracktoken");
+    localStorage.removeItem("useridengtrack");
   };
 
   return (
