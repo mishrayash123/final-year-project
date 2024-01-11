@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from "react";
-import pic from "../Images/profile.jpg";
-import {Link} from "react-router-dom"
-import { db } from "../../firebase/setup"; 
-import { collection } from "firebase/firestore";
-import {getDocs, } from "firebase/firestore";
 import '../Css/All.css'
 import {useNavigate} from 'react-router-dom'
 import { useLocation } from "react-router-dom";
@@ -23,19 +18,52 @@ function Profile() {
 
 
   const fetchData1 = async () => {
-    const colRef = collection(db,"Posts");
-    const snapshots = await getDocs(colRef);
-    const docs = snapshots.docs.map(doc => doc.data());
-    setposts(docs.filter((e)=>(e.userid===location.state.id)));
+    try {
+      const response = await fetch(
+        "https://eng-backend.onrender.com/getpost",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    
+      if (response.ok) {
+        const data = await response.json();
+        setposts(data.filter((e)=>(e.userid===location.state.id)));
+      } else {
+        alert("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
   }
 
 
 
   const fetchData = async () => {
-    const colRef = collection(db,"Profiles");
-    const snapshots = await getDocs(colRef);
-    const docs = snapshots.docs.map(doc => doc.data());
-    setprofiledata(docs);
+    try {
+      const sessionToken=localStorage.getItem("engtracktoken");
+  const response = await fetch(
+    "https://eng-backend.onrender.com/users",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({sessionToken}),
+    }
+  );
+  if (response.ok) {
+    const data = await response.json();
+    setprofiledata(data)
+  } else {
+    alert("Something went wrong");
+  }
+} catch (error) {
+  console.error("Error during login:", error);
+}
   }
 
   useEffect(() => {
@@ -48,7 +76,7 @@ function Profile() {
     <div>
     <div class="p-5">
       {
-        profiledata.filter((e)=>(e.userid===location.state.id)).map(profiledata =>(
+        profiledata.filter((e)=>(e._id===location.state.id)).map(profiledata =>(
       <div class="p-8 bg-white shadow mt-24">  
       <div class="grid grid-cols-1 md:grid-cols-3">   
        <div class="grid grid-cols-3 text-center order-last md:order-first mt-20 md:mt-0">     
@@ -72,7 +100,7 @@ function Profile() {
                                 </div>   
                                <div class="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
                                 {
-                                  profiledata.userid===localStorage.getItem("useridengtrack") ? <button  class="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5" onClick={()=>{
+                                  profiledata._id===localStorage.getItem("useridengtrack") ? <button  class="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5" onClick={()=>{
                                     nav('/edit')
                                   }}>Edit</button>  :""
                                 }
@@ -102,7 +130,7 @@ function Profile() {
        <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 pt-3 gap-8 w-[90%] max-[640px]:w-[90%] " role="group">
          {
           posts.sort(function(x, y){
-            return y.timestamp - x.timestamp;
+            return Date.parse(y.createdAt) - Date.parse(x.createdAt);
         }).map(posts =>(
             <Card color="transparent"  className="w-full max-w-[26rem] shadow-2xl rounded-lg">
             <CardHeader
@@ -115,16 +143,16 @@ function Profile() {
                 size="lg"
                 variant="circular"
                 className="w-[50px] h-[50px] rounded-full"
-                src={posts.pic}
+                src={posts.profileimage}
                 alt="tania andrew"
               />
               <div className="flex w-full flex-col gap-0.5">
                 <div className="flex items-center justify-between">
                   <Typography variant="h5" color="blue-gray">
-                    {posts.name}
+                    {posts.profilename}
                   </Typography>
                 </div>
-                <Typography color="blue-gray">{posts.sub.slice(0,40)}</Typography>
+                <Typography color="blue-gray">{posts.profilesub.slice(0,40)}</Typography>
                 <div className='flex justify-start '>
         <p className=' text-gray-600 font-bold text-sm' placeholder="k">
           {posts.date}

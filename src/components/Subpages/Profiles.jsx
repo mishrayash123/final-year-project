@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import pic from "../Images/profile.jpg"
 import {
   Card,
   CardHeader,
@@ -13,9 +12,6 @@ import {
 } from "@material-tailwind/react";
 import '../Css/All.css'
 import {useNavigate} from 'react-router-dom'
-import { auth,db } from "../../firebase/setup";
-import { collection } from "firebase/firestore";
-import {getDocs, } from "firebase/firestore";
 
 
 
@@ -29,10 +25,27 @@ function Profiles() {
  
 
   const fetchData = async () => {
-    const colRef = collection(db,"Profiles");
-    const snapshots = await getDocs(colRef);
-    const docs = snapshots.docs.map(doc => doc.data());
-    setprofiles(docs);
+    try {
+      const sessionToken=localStorage.getItem("engtracktoken");
+  const response = await fetch(
+    "https://eng-backend.onrender.com/users",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({sessionToken}),
+    }
+  );
+  if (response.ok) {
+    const data = await response.json();
+    setprofiles(data)
+  } else {
+    alert("Something went wrong");
+  }
+} catch (error) {
+  console.error("Error during login:", error);
+}
   }
 
   useEffect(() => {
@@ -74,11 +87,11 @@ function Profiles() {
       <div className='my-3'>
        <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 pt-3 gap-8 w-[90%]" role="group">
          {
-          profiles.filter((e)=>(e.category.toLowerCase().includes(cat.toLowerCase()))).filter((e)=>(e.name.toLowerCase().includes(Search.toLowerCase()))).map(profiles =>(
+          profiles.filter((e)=>(e.category!=undefined)).filter((e)=>(e.category.toLowerCase().includes(cat.toLowerCase()))).filter((e)=>(e.name.toLowerCase().includes(Search.toLowerCase()))).map(profiles =>(
             <a href=''
              onClick={
               (e) => {
-                nav('/Gotoprofile', { state: { id:profiles.userid} });
+                nav('/Gotoprofile', { state: { id:profiles._id} });
               }
           }
           >

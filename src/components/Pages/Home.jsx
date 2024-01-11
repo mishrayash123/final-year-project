@@ -1,12 +1,7 @@
 import {useNavigate} from 'react-router-dom'
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase/setup"; 
 import React, { useEffect, useState } from "react";
 import { Fragment, useRef, } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import {setDoc} from "firebase/firestore";
-import { collection } from "firebase/firestore";
-import {getDocs, } from "firebase/firestore";
 import {storage} from "../../firebase/setup"
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 import {
@@ -18,7 +13,6 @@ import {
 } from "@material-tailwind/react";
 
 const Home = () => {
-  const [profiledata,setprofiledata] = useState([]);
   const [posts,setposts] = useState([])
   const [content,setcontent] = useState("")
   const [date, setDate] = useState(new Date().toDateString());
@@ -30,29 +24,65 @@ const Home = () => {
   const [link,setlink] = useState("")
   const [image1,setimage1]=useState(null)
   const [textoimage, settextoimage] = useState("");
+  const [profileimage,setprofileimage] = useState("")
+  const [profilename,setprofilename] = useState("")
+  const [profilesub,setprofilesub] = useState("")
+
 
   const cancelButtonRef = useRef(null)
 
   const fetchData1 = async () => {
-    const colRef = collection(db,"Posts");
-    const snapshots = await getDocs(colRef);
-    const docs = snapshots.docs.map(doc => doc.data());
-    setposts(docs);
+    try {
+      const response = await fetch(
+        "https://eng-backend.onrender.com/getpost",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    
+      if (response.ok) {
+        const data = await response.json();
+        setposts(data)
+      } else {
+        alert("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
   }
 
 
 
 
   const fetchData = async () => {
-    const docRef = doc(db, "Profiles",userid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      setprofiledata(docSnap.data())
-      
-    } else {
-      alert("you have not completed your profile yet ....")
-      nav('/edit')
+    try {
+      const sessionToken=localStorage.getItem("engtracktoken");
+  const response = await fetch(
+    "https://eng-backend.onrender.com/users",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({sessionToken}),
     }
+  );
+  if (response.ok) {
+    const data = await response.json();
+    const data1 =data.filter((e) => ((e._id ===userid)));
+    setprofileimage(data1[0].image)
+    setprofilename(data1[0].name)
+    setprofilesub(data1[0].subtitle)
+  } else {
+    alert("Something went wrong");
+    nav('/edit')
+  }
+} catch (error) {
+  console.error("Error during login:", error);
+}
   }
 
   const handleuploadimage = async() =>{
@@ -80,25 +110,34 @@ const Home = () => {
   handleuploadimage();
   }
 
-  const post = ()=>{
-    const id = parseInt(Math.random()*1000).toString();
-    setDoc(doc(db,"Posts",id), {
-      content:content,
-      image:image,
-      link:link,
-      date: date,
-      pic:profiledata.image,
-      userid:userid,
-      id:id,
-      name:profiledata.name,
-      sub:profiledata.subtitle,
-      timestamp:Date.now()
+  
+
+  const post = async()=>{
+    try {
+  const response = await fetch(
+    "https://eng-backend.onrender.com/addtopost",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({content,link,userid,image,date,profileimage,profilename,profilesub}),
     }
-    );
+  );
+
+  if (response.ok) {
+    const data = await response.json();
     alert("Post Uploaded Succesfully");
     setcontent("")
     setlink("")
+    setimage("")
     fetchData1()
+  } else {
+    alert("something went wrong");
+  }
+} catch (error) {
+  console.error("Error during login:", error);
+}
   }
 
   useEffect(() => {
@@ -207,7 +246,7 @@ const Home = () => {
     </Transition.Root>
 <nav class="bg-blue-800 border-gray-200 dark:bg-gray-900">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-     <a href="/profile"><img src={profiledata.image} class="w-[50px] h-[50px] rounded-full" alt="Flowbite Logo" /></a> 
+     <a href="/profile"><img src={profileimage} class="w-[50px] h-[50px] rounded-full" alt="Flowbite Logo" /></a> 
   <div class="flex md:order-2">
     <div class="relative  ">
       <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -240,7 +279,7 @@ const Home = () => {
        <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 pt-3 gap-8 w-[90%] max-[640px]:w-[90%] " role="group">
          {
           posts.sort(function(x, y){
-            return y.timestamp - x.timestamp;
+            return Date.parse(y.createdAt) - Date.parse(x.createdAt);
         }).filter((e)=>(e.content.toLowerCase().includes(search.toLowerCase()))).map(posts =>(
             <Card color="transparent"  className="w-full max-w-[26rem] shadow-2xl rounded-lg">
             <CardHeader
@@ -253,7 +292,7 @@ const Home = () => {
                 size="lg"
                 variant="circular"
                 className="w-[50px] h-[50px] rounded-full cursor-pointer"
-                src={posts.pic}
+                src={posts.profileimage}
                 alt="tania andrew"
                 onClick={
                   (e) => {
@@ -268,10 +307,10 @@ const Home = () => {
                     nav('/Gotoprofile', { state: { id:posts.userid} });
                   }
               }>
-                    {posts.name}
+                    {posts.profilename}
                   </Typography>
                 </div>
-                <Typography color="blue-gray">{posts.sub.slice(0,40)}</Typography>
+                <Typography color="blue-gray">{posts.profilesub.slice(0,40)}</Typography>
                 <div className='flex justify-start '>
         <p className=' text-gray-600 font-bold text-sm' placeholder="k">
           {posts.date}
