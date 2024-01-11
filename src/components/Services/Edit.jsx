@@ -35,7 +35,6 @@ function Edit() {
         if (response.ok) {
           alert("Updated");
           navigate("/profile");
-          console.log(response.data)
         }else {
           alert("something went wrong...please check credential");
         }
