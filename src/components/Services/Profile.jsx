@@ -150,52 +150,57 @@ function Profile() {
                                </div>
                                ))}
                                </div>
-                               <div className='my-3'>
-       <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 pt-3 gap-8 w-[90%] max-[640px]:w-[90%] " role="group">
-         {
-          posts.sort(function(x, y){
-            return Date.parse(y.createdAt) - Date.parse(x.createdAt);
-        }).map(posts =>(
-            <Card color="transparent"  className="w-full max-w-[26rem] shadow-2xl rounded-lg">
-            <CardHeader
-              color="transparent"
-              floated={false}
-              shadow={false}
-              className="mx-0 flex items-center gap-4 pt-0 pb-4 px-2"
-            >
-              <Avatar
-                size="lg"
-                variant="circular"
-                className="w-[50px] h-[50px] rounded-full"
-                src={posts.profileimage}
-                alt="tania andrew"
-              />
-              <div className="flex w-full flex-col gap-0.5">
-                <div className="flex items-center justify-between">
-                  <Typography variant="h5" color="blue-gray">
-                    {posts.profilename}
-                  </Typography>
-                </div>
-                <Typography color="blue-gray">{posts.profilesub.slice(0,40)}</Typography>
-                <div className='flex justify-start '>
-        <p className=' text-gray-600 font-bold text-sm' placeholder="k">
-          {posts.date}
-        </p>
-        </div>
+                               <div className='m-3'>
+  <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 pt-3 gap-8 w-full sm:w-5/6 lg:w-3/4 xl:w-11/12" role="group">
+    {
+      posts.sort(function (x, y) {
+        return Date.parse(y.createdAt) - Date.parse(x.createdAt);
+      }).map(posts => (
+        <Card color="transparent" className="w-full max-w-[26rem] sm:max-w-full shadow-2xl  rounded-lg mx-auto">
+          <CardHeader
+            color="transparent"
+            floated={false}
+            shadow={false}
+            className="mx-0 flex items-center gap-4 pt-0 pb-4 px-2"
+          >
+            <Avatar
+              size="lg"
+              variant="circular"
+              className="w-[50px] h-[50px] rounded-full cursor-pointer"
+              src={posts.profileimage}
+              alt="tania andrew"
+              onClick={(e) => {
+                nav('/Gotoprofile', { state: { id: posts.userid } });
+              }}
+            />
+            <div className="flex w-full flex-col gap-0.5">
+              <div className="flex items-center justify-between ">
+                <Typography variant="h5" color="blue-gray" className='cursor-pointer' onClick={(e) => {
+                  nav('/Gotoprofile', { state: { id: posts.userid } });
+                }}>
+                  {posts.profilename}
+                </Typography>
               </div>
-            </CardHeader>
-            <CardBody className="mb-6 p-3 ">
-              <Typography>
-               {posts.content}
-              </Typography>
-              <Typography className='text-blue-600 font-bold mt-10'>
-               <a href={posts.link} target='_blank'>{posts.link}</a>
-              </Typography>
-              {posts.image && (
-                <img src={posts.image}  className='mt-3 w-[400px] h-[350px]'/>
-              )}
-            </CardBody>
-            <div className='flex items-center justify-center m-3'>
+              <Typography color="blue-gray">{posts.profilesub.slice(0, 40)}</Typography>
+              <div className='flex justify-start '>
+                <p className='text-gray-600 font-bold text-sm' placeholder="k">
+                  {posts.date}
+                </p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardBody className="mb-1 p-2 text-wrap overflow-hidden">
+            <Typography>
+              {posts.content}
+            </Typography>
+            <Typography className='text-blue-600 font-bold mt-10 '>
+              <a href={posts.link} target='_blank'>{posts.link}</a>
+            </Typography>
+            {posts.image && (
+              <img src={posts.image} className='mt-3 w-full h-auto' />
+            )}
+          </CardBody>
+          <div className='flex items-center justify-center m-3'>
             <p className=' text-red-600 font-bold text-sm cursor-pointer' placeholder="k" onClick={
                                             async (e) => {
                                                 remove(posts._id);
@@ -204,11 +209,12 @@ function Profile() {
           Delete
         </p>
         </div>
-          </Card>
-          ))
-         }
-     </div>
-      </div>
+        </Card>
+      ))
+    }
+  </div>
+</div>
+
                                </div>
   );
 }

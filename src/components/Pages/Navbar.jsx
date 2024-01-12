@@ -2,6 +2,7 @@ import { Transition } from "@headlessui/react";
 import React, { useState, useRef, useEffect } from "react";
 import pic from "../Images/profile.jpg";
 import {useAuth} from "../../AuthContext"
+import logoeng from '../Images/logoeng.png'
 
 
 const Navbar = () => {
@@ -54,7 +55,11 @@ const Navbar = () => {
                 <a
                   href="/"
                 >
-                <h1 className="text-xl text-black font-bold">Eng-Track</h1>
+                 <img
+          src={logoeng}
+          alt="ui/ux review check"
+          className=' w-[190px] h-[60px]'
+        />
                 </a>
               </div>
             </div>
