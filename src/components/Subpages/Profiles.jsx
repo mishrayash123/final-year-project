@@ -84,9 +84,10 @@ function Profiles() {
 		</form>
 	</div>
 </div>
-      <div className='my-3'>
-       <div className="container mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 pt-3 gap-8 w-[90%]" role="group">
-         {
+      <div class="w-full  p-4  sm:p-8 ">
+   <div class="flow-root">
+        <ul role="list" class="">
+        {
           profiles.filter((e)=>(e.category!=undefined)).filter((e)=>(e.category.toLowerCase().includes(cat.toLowerCase()))).filter((e)=>(e.name.toLowerCase().includes(Search.toLowerCase()))).map(profiles =>(
             <a href=''
              onClick={
@@ -95,41 +96,31 @@ function Profiles() {
               }
           }
           >
-            <Card className="cardwid shadow-lg m-2" placeholder="k">
-      <CardHeader floated={false} color="blue-gray" placeholder="k">
-        <img
-          src={profiles.image}
-          alt="ui/ux review check"
-          className='rounded-full wid mx-auto'
-        />
-      </CardHeader>
-      <CardBody placeholder="k">
-        <div className="mb-3 ">
-          <Typography variant="h6" color="blue-gray" className="font-medium" placeholder="k">
-           {profiles.name}
-          </Typography>
-        </div>
-        <div className='flex items-center justify-between'>
-        <Typography color="gray" className=' text-black font-bold' placeholder="k">
-          B-Tech {profiles.category}
-        </Typography>
-        <Typography
-          placeholder="k"
-            color="blue-gray"
-            className="flex items-center gap-1.5 font-normal"
-          >
-          Cs & IT
-          </Typography>
-        </div>
-        {/* <div className="group mt-8 inline-flex flex-wrap items-center gap-3">
-        </div> */}
-      </CardBody>
-    </Card>
-    </a>
-          ))
+            <li class="py-3 sm:py-4 shadow-2xl rounded-lg">
+                <div class="flex items-center p-2">
+                    <div class="flex-shrink-0">
+                        <img class="w-16 h-16 rounded-full max-[412px]:w-8 max-[412px]:h-8" src={profiles.image} alt="Neil image" />
+                    </div>
+                    <div class="flex-1 min-w-0 ms-4">
+                        <p class="text-base font-bold text-gray-900 truncate dark:text-white max-[412px]:text-sm">
+                        {profiles.name}
+                        </p>
+                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                        Cs & IT
+                        </p>
+                    </div>
+                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white max-[412px]:text-sm">
+                    B-Tech {profiles.category}
+                    </div>
+                </div>
+            </li>
+            </a>
+            ))
          }
-     </div>
-      </div>
+        </ul>
+   </div>
+</div>
+
       </div>
     );
   }
