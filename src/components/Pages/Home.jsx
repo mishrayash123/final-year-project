@@ -246,7 +246,7 @@ const Home = () => {
     </Transition.Root>
 <nav class="bg-blue-800 border-gray-200 dark:bg-gray-900">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-     <a href="/profile"><img src={profileimage} class="w-[50px] h-[50px] rounded-full" alt="Flowbite Logo" /></a> 
+     <a href="/profile"><img src={profileimage} class="w-[50px] h-[50px] rounded-full" alt="profile pic" /></a> 
   <div class="flex md:order-2">
     <div class="relative  ">
       <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">

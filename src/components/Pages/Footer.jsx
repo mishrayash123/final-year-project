@@ -81,7 +81,7 @@ function Footer() {
       <div className="">
         <h6
           className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
-          Eng-Track
+          Eng Track
         </h6>
         <p>
           Department of 
