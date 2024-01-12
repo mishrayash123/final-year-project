@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {storage} from "../../firebase/setup"
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
@@ -18,6 +18,45 @@ function Edit() {
   const navigate = useNavigate();
   const [textoimage, settextoimage] = useState("");
   const userid = localStorage.getItem("useridengtrack");
+
+
+  const fetchData = async () => {
+    try {
+      const sessionToken=localStorage.getItem("engtracktoken");
+  const response = await fetch(
+    "https://eng-backend.onrender.com/users",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({sessionToken}),
+    }
+  );
+  if (response.ok) {
+    const data = await response.json();
+    const data1 =data.filter((e) => ((e._id ===userid)));
+    setcategory(data1[0].category)
+    setPhone(data1[0].phone)
+    setabout(data1[0].about)
+    setcAddress(data1[0].caddress)
+    setpAddress(data1[0].paddress)
+    setimage(data1[0].image)
+    setname(data1[0].name)
+    setsubtitle(data1[0].subtitle)
+    setwhatsapp(data1[0].whatsapp)
+    setLinkedinid(data1[0].Linkedinid)
+  } else {
+    alert("Something went wrong");
+  }
+} catch (error) {
+  console.error("Error during login:", error);
+}
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
@@ -253,6 +292,7 @@ handleuploadimage();
           <input type="file" onChange={handleChange}/>
         </div>
         <p className="text-base text-red-600">{textoimage}</p> 
+        <p className="text-base text-blue-600">Profile Image url : <span className="text-red-600">{image}</span></p> 
         <button
           type="submit"
           className="text-white bg-blue-700 hover-bg-blue-800 focus-ring-4 focus-outline-none focus-ring-blue-300 font-medium rounded-lg text-sm w-full sm-w-auto px-5 py-2.5 text-center dark-bg-blue-600 dark-hover-bg-blue-700 dark-focus-ring-blue-800"
