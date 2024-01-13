@@ -98,6 +98,10 @@ function Footer() {
           <a href="/users" className="text-white dark:text-neutral-200"
             >Profiles</a>
         </p>
+        <p className="mb-4">
+          <a href="/listreview" className="text-white dark:text-neutral-200"
+            >Testimonials</a>
+        </p>
       </div>
       <div className="">
         <h6
