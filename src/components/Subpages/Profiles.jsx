@@ -12,6 +12,7 @@ import {
 } from "@material-tailwind/react";
 import '../Css/All.css'
 import {useNavigate} from 'react-router-dom'
+import pic from "../Images/profile.jpg"
 
 
 
@@ -99,7 +100,7 @@ function Profiles() {
             <li class="py-3 sm:py-4 shadow-2xl rounded-lg">
                 <div class="flex items-center p-2">
                     <div class="flex-shrink-0">
-                        <img class="w-16 h-16 rounded-full max-[412px]:w-8 max-[412px]:h-8" src={profiles.image} alt="Neil image" />
+                        <img class="w-16 h-16 rounded-full max-[412px]:w-8 max-[412px]:h-8" src={pic || profiles.image} alt="Neil image" />
                     </div>
                     <div class="flex-1 min-w-0 ms-4">
                         <p class="text-base font-bold text-gray-900 truncate dark:text-white max-[412px]:text-sm">
