@@ -11,8 +11,11 @@ import {
   Typography,
   Avatar,
 } from "@material-tailwind/react";
+import {useAuth} from "../../AuthContext"
+
 
 const Home = () => {
+  const {logout} = useAuth();
   const [posts,setposts] = useState([])
   const [content,setcontent] = useState("")
   const [date, setDate] = useState(new Date().toDateString());
@@ -47,7 +50,7 @@ const Home = () => {
         const data = await response.json();
         setposts(data)
       } else {
-        alert("Something went wrong");
+        alert("Something went wrong to loading posts");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -76,9 +79,13 @@ const Home = () => {
     setprofileimage(data1[0].image)
     setprofilename(data1[0].name)
     setprofilesub(data1[0].subtitle)
-  } else {
-    alert("Something went wrong");
+    if(!data1[0].image){
+      alert("You are first time user so update your profile");
     nav('/edit')
+    }
+  } else {
+    alert("There is an error");
+    logout();
   }
 } catch (error) {
   console.error("Error during login:", error);
