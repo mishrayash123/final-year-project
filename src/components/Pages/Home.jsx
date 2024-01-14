@@ -18,7 +18,7 @@ import pic from "../Images/profile.jpg"
 const Home = () => {
   const {logout} = useAuth();
   const [posts,setposts] = useState([])
-  const [content,setcontent] = useState("")
+  const [content,setcontent] = useState(" ")
   const [date, setDate] = useState(new Date().toDateString());
   const nav = useNavigate();
   const userid = localStorage.getItem("useridengtrack");
@@ -26,7 +26,6 @@ const Home = () => {
   const [search,setsearch] = useState("")
   const [image,setimage] = useState("")
   const [link,setlink] = useState("")
-  const [image1,setimage1]=useState(null)
   const [textoimage, settextoimage] = useState("");
   const [profileimage,setprofileimage] = useState("")
   const [profilename,setprofilename] = useState("")
@@ -92,10 +91,13 @@ const Home = () => {
 }
   }
 
-  const handleuploadimage = async() =>{
-    const imageRef = ref(storage,content);
-    if (image1) {
-        uploadBytes(imageRef, image1).then(() => {
+  
+  
+  function handleChange(event) {
+  const imageRef = ref(storage,content);
+    if (event.target.files[0]) {
+      settextoimage("Image selected");
+        uploadBytes(imageRef, event.target.files[0]).then(() => {
             getDownloadURL(imageRef).then((url) => {
                 setimage(url);
                 alert("Image Uploaded")
@@ -109,12 +111,6 @@ const Home = () => {
             console.log(error.message);
         })
     }
-  }
-  
-  function handleChange(event) {
-      setimage1(event.target.files[0]);
-  settextoimage("Image selected");
-  handleuploadimage();
   }
 
   
@@ -135,7 +131,7 @@ const Home = () => {
   if (response.ok) {
     const data = await response.json();
     alert("Post Uploaded Succesfully");
-    setcontent("")
+    setcontent(" ")
     setlink("")
     setimage("")
     fetchData1()

@@ -10,7 +10,6 @@ function Edit() {
   const [caddress, setcAddress] = useState("");
   const [paddress, setpAddress] = useState("");
   const [image, setimage] = useState("");
-  const [image1, setimage1] = useState(null);
   const [name, setname] = useState("");
   const [subtitle, setsubtitle] = useState("");
   const [whatsapp, setwhatsapp] = useState("");
@@ -84,10 +83,12 @@ function Edit() {
 
 
 
- const handleuploadimage = async() =>{
-  const imageRef = ref(storage, userid);
-  if (image1) {
-      uploadBytes(imageRef, image1).then(() => {
+
+function handleChange(event) {
+const imageRef = ref(storage, userid);
+  if (event.target.files[0]) {
+    settextoimage("Image selected");
+      uploadBytes(imageRef, event.target.files[0]).then(() => {
           getDownloadURL(imageRef).then((url) => {
               setimage(url);
               alert("Image Uploaded")
@@ -101,12 +102,10 @@ function Edit() {
           console.log(error.message);
       })
   }
-}
+  else{
+    alert("select another image")
+  }
 
-function handleChange(event) {
-    setimage1(event.target.files[0]);
-settextoimage("Image selected");
-handleuploadimage();
 }
 
   return (
