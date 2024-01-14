@@ -85,7 +85,6 @@ const Home = () => {
     }
   } else {
     alert("There is an error");
-    logout();
   }
 } catch (error) {
   console.error("Error during login:", error);
